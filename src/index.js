@@ -8,6 +8,11 @@ import {
     getDoc, updateDoc
 } from "firebase/firestore"
 
+import {
+    getAuth,
+    createUserWithEmailAndPassword
+} from "firebase/auth"
+
 const firebaseConfig = {
   apiKey: "AIzaSyAXNfybclkDYxSlA1dTFj1TUZYPhWR10d0",
   authDomain: "fir-9-tutorial-48d10.firebaseapp.com",
@@ -15,13 +20,14 @@ const firebaseConfig = {
   storageBucket: "fir-9-tutorial-48d10.firebasestorage.app",
   messagingSenderId: "374619808371",
   appId: "1:374619808371:web:4cc1143be3d10f5c1d8006"
-};
+}
 
 // init firebase app
 initializeApp(firebaseConfig)
 
 // init services
 const db = getFirestore()
+const auth = getAuth()
 
 // collection ref
 const colRef = collection(db, "books")
@@ -87,5 +93,23 @@ updateBookForm.addEventListener("submit", (e) => {
     })
     .then(() => {
         updateBookForm.reset()
+    })
+})
+
+// Updating documents
+const signupForm = document.querySelector(".signup")
+signupForm.addEventListener("submit", (e) => {
+    e.preventDefault()
+
+    const email = signupForm.email.value
+    const password = signupForm.password.value
+
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((cred) => {
+        console.log("User created: ",cred.user)
+        signupForm.reset()
+    })
+    .catch(err => {
+        console.log(err)
     })
 })
