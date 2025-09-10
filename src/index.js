@@ -10,7 +10,8 @@ import {
 
 import {
     getAuth,
-    createUserWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    signOut, signInWithEmailAndPassword
 } from "firebase/auth"
 
 const firebaseConfig = {
@@ -96,7 +97,7 @@ updateBookForm.addEventListener("submit", (e) => {
     })
 })
 
-// Updating documents
+// Signing up users
 const signupForm = document.querySelector(".signup")
 signupForm.addEventListener("submit", (e) => {
     e.preventDefault()
@@ -108,6 +109,35 @@ signupForm.addEventListener("submit", (e) => {
     .then((cred) => {
         console.log("User created: ",cred.user)
         signupForm.reset()
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+// Logging in and out
+const logoutButton = document.querySelector(".logout")
+logoutButton.addEventListener("click", () => {
+    signOut(auth)
+    .then(() => {
+        console.log("User logged out")
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+const loginForm = document.querySelector(".login")
+loginForm.addEventListener("submit", (e) => {
+    e.preventDefault()
+
+    const email = loginForm.email.value
+    const password = loginForm.password.value
+
+    signInWithEmailAndPassword(auth, email, password)
+    .then((cred) => {
+        console.log("User logged in: ",cred.user)
+        loginForm.reset()
     })
     .catch(err => {
         console.log(err)
