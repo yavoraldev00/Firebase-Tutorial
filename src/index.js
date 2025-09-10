@@ -11,7 +11,8 @@ import {
 import {
     getAuth,
     createUserWithEmailAndPassword,
-    signOut, signInWithEmailAndPassword
+    signOut, signInWithEmailAndPassword,
+    onAuthStateChanged
 } from "firebase/auth"
 
 const firebaseConfig = {
@@ -79,7 +80,7 @@ deleteBookForm.addEventListener("submit", (e) => {
 const docRef = doc(db, "books", "uwR1LTbV0HCXfA5TnFNW")
 
 onSnapshot(docRef, (doc) => {
-    console.log(doc.data(), doc.id)
+    // console.log(doc.data(), doc.id)
 })
 
 // Updating documents
@@ -107,11 +108,11 @@ signupForm.addEventListener("submit", (e) => {
 
     createUserWithEmailAndPassword(auth, email, password)
     .then((cred) => {
-        console.log("User created: ",cred.user)
+        // console.log("User created: ",cred.user)
         signupForm.reset()
     })
     .catch(err => {
-        console.log(err)
+        // console.log(err)
     })
 })
 
@@ -120,10 +121,10 @@ const logoutButton = document.querySelector(".logout")
 logoutButton.addEventListener("click", () => {
     signOut(auth)
     .then(() => {
-        console.log("User logged out")
+        // console.log("User logged out")
     })
     .catch(err => {
-        console.log(err)
+        // console.log(err)
     })
 })
 
@@ -136,10 +137,15 @@ loginForm.addEventListener("submit", (e) => {
 
     signInWithEmailAndPassword(auth, email, password)
     .then((cred) => {
-        console.log("User logged in: ",cred.user)
+        // console.log("User logged in: ",cred.user)
         loginForm.reset()
     })
     .catch(err => {
-        console.log(err)
+        // console.log(err)
     })
+})
+
+// Subscribing to auth changes
+onAuthStateChanged(auth, (user) => {
+    console.log("User: ", user)
 })
